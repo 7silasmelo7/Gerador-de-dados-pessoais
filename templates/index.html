@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerador de dados pessoais brasileiros fictícios para testes e desenvolvimento">
+    <meta name="author" content="Silas Melo">
+    <title>Gerador de Dados Pessoais Brasileiros</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇧🇷</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">🇧🇷 Gerador de Dados Pessoais</h1>
+                <p class="subtitle">Dados fictícios brasileiros para testes e desenvolvimento</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="card">
+                    <h2 class="card-title">⚙️ Painel de Controle</h2>
+                    
+                    <div class="control-group">
+                        <label for="quantidade" class="label">
+                            Quantidade de Pessoas
+                            <span class="tooltip" title="Máximo de 100 pessoas por vez">ℹ️</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="quantidade" 
+                            class="input" 
+                            min="1" 
+                            max="100" 
+                            value="1"
+                            placeholder="Digite um número entre 1 e 100"
+                        >
+                    </div>
+
+                    <div class="button-grid">
+                        <button id="btnGerarUma" class="btn btn-primary">
+                            <span class="btn-icon">👤</span>
+                            Gerar 1 Pessoa
+                        </button>
+                        
+                        <button id="btnGerarMultiplas" class="btn btn-secondary">
+                            <span class="btn-icon">👥</span>
+                            Gerar Múltiplas
+                        </button>
+                        
+                        <button id="btnExportarExcel" class="btn btn-success">
+                            <span class="btn-icon">📊</span>
+                            Exportar Excel
+                        </button>
+                        
+                        <button id="btnExportarCSV" class="btn btn-info">
+                            <span class="btn-icon">📄</span>
+                            Exportar CSV
+                        </button>
+                        
+                        <button id="btnLimpar" class="btn btn-danger">
+                            <span class="btn-icon">🗑️</span>
+                            Limpar Resultados
+                        </button>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="stats" id="stats" style="display: none;">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Gerado:</span>
+                            <span class="stat-value" id="totalGerado">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Última Geração:</span>
+                            <span class="stat-value" id="ultimaGeracao">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validador de CPF -->
+                <div class="card">
+                    <h2 class="card-title">🔍 Validador de CPF</h2>
+                    
+                    <div class="control-group">
+                        <label for="cpfValidar" class="label">Digite o CPF</label>
+                        <input 
+                            type="text" 
+                            id="cpfValidar" 
+                            class="input" 
+                            placeholder="000.000.000-00"
+                            maxlength="14"
+                        >
+                    </div>
+
+                    <button id="btnValidarCPF" class="btn btn-primary btn-block">
+                        <span class="btn-icon">✓</span>
+                        Validar CPF
+                    </button>
+
+                    <div id="resultadoValidacao" class="validation-result" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Gerando dados...</p>
+            </div>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="card">
+                    <div class="results-header">
+                        <h2 class="card-title">📋 Resultados</h2>
+                        <button id="btnCopiarTodos" class="btn btn-small btn-outline">
+                            <span class="btn-icon">📋</span>
+                            Copiar Todos
+                        </button>
+                    </div>
+                    <div id="resultsContainer" class="results-container"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>💻 Desenvolvido por <strong>Silas Melo</strong> • 2025</p>
+            <p class="footer-note">⚠️ Dados fictícios gerados para fins de teste. Não usar em produção.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
