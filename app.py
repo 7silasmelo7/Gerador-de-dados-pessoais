@@ -9,8 +9,17 @@ import gerador
 import io
 import pandas as pd
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+
+# Carrega variáveis de ambiente do arquivo .env
+load_dotenv()
+
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-change-in-production')
 CORS(app)
 
 @app.route('/')

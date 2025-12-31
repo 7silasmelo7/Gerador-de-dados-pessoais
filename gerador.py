@@ -5,10 +5,12 @@ import pandas as pd
 from typing import Dict, Optional, Tuple, List
 from brazilcep import get_address_from_cep, WebService
 from pathlib import Path
+from functools import lru_cache
+import os
 
 # Constantes
-MAX_CEP_ATTEMPTS = 50
-REQUEST_TIMEOUT = 5  # segundos
+MAX_CEP_ATTEMPTS = int(os.getenv('MAX_CEP_ATTEMPTS', '5'))  # Reduzido para testes
+REQUEST_TIMEOUT = int(os.getenv('REQUEST_TIMEOUT', '2'))  # segundos - Reduzido para testes
 MIN_AGE_YEARS = 18
 MAX_AGE_YEARS = 80
 MAX_NAME_LENGTH = 60
@@ -130,6 +132,11 @@ def _gerar_cep_aleatorio() -> str:
     cep_digits = [str(random.randint(0, 9)) for _ in range(8)]
     return "".join(cep_digits)
 
+@lru_cache(maxsize=1000)
+def buscar_cep_com_cache(cep: str):
+    # código de busca 
+    pass
+
 def _formatar_endereco(cep: str, address: Dict) -> Dict[str, Optional[str]]:
     """
     Formata os dados de endereço em estrutura padronizada.
@@ -164,7 +171,8 @@ def _buscar_endereco_por_cep(cep: str, webservice: WebService) -> Optional[Dict]
         address = get_address_from_cep(cep, webservice=webservice, timeout=REQUEST_TIMEOUT)
         if address:
             return _formatar_endereco(cep, address)
-    except (ConnectionError, TimeoutError, ValueError, KeyError):
+    except Exception:
+        # Captura qualquer erro de conexão, timeout, ou API
         pass
     return None
 
